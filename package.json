@@ -1,5 +1,5 @@
 {
-  "name": "node-minecraft-runner",
+  "name": "minecraft-runner",
   "version": "0.0.1",
   "description": "A node module meant to manage a minecraft server instance",
   "main": "index.js",
