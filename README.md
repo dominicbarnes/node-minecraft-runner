@@ -14,7 +14,7 @@ var Game = require("minecraft-runner");
 
 ## Usage
 
-### Game(dir, jar, [options]) <small>constructor</small>
+### Game(dir, jar, [options])
 
 The constructor will create an object representing a file on disk.
 
@@ -110,6 +110,22 @@ Short-hand for `game.command("say", msg);`
 game.say("Hello World!");
 ```
 
+## Events
+
+ - **start** - emitted before a server has started
+ - **started** - emitted after a server has finished starting
+ - **stop** - emitted before stopping the server
+ - **stopped** - emitted after the server has finished stopping
+ - **error (err)** - triggered by an error in the server (via log) or from a java exception
+ - **java (msg)** - a java exception (usually outside the minecraft game itself)
+ - **log (meta)** - emitted any time a log is detected from the server
+ - **version (name)** - emitted when the server reports the version of the jar being used
+ - **joined (name, details)** - emitted after a player joins the server
+ - **left (name, reason)** - emitted after a player leaves the server
+ - **saveoff** - emitted after the server reports it has stopped auto-saving (in response to `save-off` command)
+ - **saveon** - emitted after the server reports it has resumed auto-saving (in response to `save-on` command)
+ - **saved** - emitted after the server reports it has finished saving (in response to `save-all` command)
+
 ## Change Log
 
  - **v0.0.1** Initial Release
@@ -117,3 +133,4 @@ game.say("Hello World!");
 ## Upcoming Features
 
  * More command helper functions
+ * More server events
