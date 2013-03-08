@@ -1,6 +1,6 @@
 {
   "name": "minecraft-runner",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A node module meant to manage a minecraft server instance",
   "main": "index.js",
   "scripts": {
@@ -18,9 +18,10 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.8.1",
-    "should": "~1.2.1"
+    "should": "~1.2.1",
+    "wrench": "~1.4.4"
   },
   "dependencies": {
-    "lodash": "~1.0.0-rc.3"
+    "lodash": "~1.0"
   }
 }
