@@ -18,9 +18,10 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.8.1",
-    "should": "~1.2.1"
+    "should": "~1.2.1",
+    "wrench": "~1.4.4"
   },
   "dependencies": {
-    "lodash": "~1.0.0-rc.3"
+    "lodash": "~1.0"
   }
 }

@@ -1,31 +1,47 @@
-var events = require("events"),
-    fs     = require("fs"),
-    https  = require("https"),
-    path   = require("path"),
-    should = require("should"),
-    Game   = require("../lib/Game");
+var events  = require("events"),
+    fs      = require("fs"),
+    https   = require("https"),
+    path    = require("path"),
+    should  = require("should"),
+    wrench  = require("wrench"),
+    Game    = require("../lib/Game"),
+    support = path.join(__dirname, "support");
+
+before(function (done) {
+    fs.mkdir(support, function () {
+        done();
+    });
+});
 
 describe("Game", function () {
-    var dir  = path.join(__dirname, "support/server"),
-        jar  = path.join(__dirname, "support/minecraft_server.jar"),
+    var dir  = path.join(support, "server"),
+        jar  = path.join(support, "minecraft_server.jar"),
         url  = "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar",
         game = new Game(dir, jar);
 
     before(function (done) {
         var context = this;
 
-        fs.exists(jar, function (exists) {
-            if (exists) return done();
+        fs.mkdir(dir, function (err) {
+            if (err) return done(err);
 
-            context.timeout(5000);
-            https.get(url, function (res) {
-                res.pipe(fs.createWriteStream(jar));
-                res.on("end", done);
+            fs.exists(jar, function (exists) {
+                if (exists) return done();
+
+                context.timeout("5s");
+                https.get(url, function (res) {
+                    res.pipe(fs.createWriteStream(jar));
+                    res.once("end", done);
+                });
             });
         });
     });
 
-    describe("constructor", function () {
+    after(function (done) {
+        wrench.rmdirRecursive(dir, done);
+    });
+
+    describe(".constructor", function () {
         it("should be an instance of EventEmitter", function () {
             game.should.be.instanceof(events.EventEmitter);
         });
@@ -131,7 +147,7 @@ describe("Game", function () {
     });
 
     describe("#start()", function () {
-        this.timeout(10000);
+        this.timeout("10s");
 
         afterEach(function (done) {
             game.stop(function () {
@@ -162,13 +178,28 @@ describe("Game", function () {
 
             game.status.should.equal("Starting");
         });
+
+        it("should emit version, start and started", function (done) {
+            var count = 0;
+            function incr() { count += 1; }
+
+            game.once("version", incr);
+            game.once("start", incr);
+            game.once("started", incr);
+            game.once("error", done);
+
+            game.start(function () {
+                count.should.equal(3);
+                done();
+            });
+        });
     });
 
     describe("#stop()", function () {
-        this.timeout(2500);
+        this.timeout("3s");
 
         beforeEach(function (done) {
-            this.timeout(10000);
+            this.timeout("10s");
 
             game.start(done);
         });
@@ -185,19 +216,34 @@ describe("Game", function () {
             game.status.should.equal("Stopping");
         });
 
-        it("should null the process property", function (done) {
+        it("should remove the process property", function (done) {
             should.exist(game.process);
 
             game.stop(function (err) {
                 if (err) return done(err);
+
                 should.not.exist(game.process);
+                done();
+            });
+        });
+
+        it("should emit stop and stopped", function (done) {
+            var count = 0;
+            function incr() { count += 1; }
+
+            game.once("stop", incr);
+            game.once("stopped", incr);
+            game.once("error", done);
+
+            game.stop(function () {
+                count.should.equal(2);
                 done();
             });
         });
     });
 
     describe("#restart()", function () {
-        this.timeout(10000);
+        this.timeout("10s");
 
         beforeEach(function (done) {
             game.start(done);
@@ -207,15 +253,15 @@ describe("Game", function () {
             game.stop(done);
         });
 
-        it("should emit version, stop, stopped, start, and started events", function (done) {
+        it("should emit version, stop, stopped, start, and started", function (done) {
             var events = 0;
             function incr() { events += 1; }
 
-            game.on("version", incr);
-            game.on("stop",    incr);
-            game.on("stopped", incr);
-            game.on("start",   incr);
-            game.on("started", incr);
+            game.once("version", incr);
+            game.once("stop",    incr);
+            game.once("stopped", incr);
+            game.once("start",   incr);
+            game.once("started", incr);
 
             game.restart(function (err) {
                 if (err) return done(err);
