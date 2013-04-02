@@ -147,7 +147,7 @@ describe("Game", function () {
     });
 
     describe("#start()", function () {
-        this.timeout("10s");
+        this.timeout("15s");
 
         afterEach(function (done) {
             game.stop(function () {
@@ -268,6 +268,22 @@ describe("Game", function () {
                 events.should.equal(5);
                 done();
             });
+        });
+    });
+
+    describe("#log", function () {
+        this.timeout("15s");
+
+        beforeEach(function (done) {
+            game.start(done);
+        });
+
+        afterEach(function (done) {
+            game.stop(done);
+        });
+
+        it("should append the output of the server console to the log property", function () {
+            game.log.should.be.ok;
         });
     });
 });
