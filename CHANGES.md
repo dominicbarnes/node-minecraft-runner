@@ -2,7 +2,7 @@ Version History
 ===============
 
 ## 0.0.4 (August 30, 2013)
- * Adding `CHANGES.md` ()
+ * Adding `CHANGES.md` (a0e79ebe0ded5ea4a4bba1b8b4e03af3b0a5fb64)
  * Replaced `wrench` with `rimraf` (556202d0bdb95420963658b87fc3f99484210f9c)
 
 ## 0.0.3 (April 2, 2013)
