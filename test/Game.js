@@ -2,15 +2,14 @@ var events  = require("events"),
     fs      = require("fs"),
     https   = require("https"),
     path    = require("path"),
+    mkdirp  = require("mkdirp"),
     should  = require("should"),
-    wrench  = require("wrench"),
+    rimraf  = require("rimraf"),
     Game    = require("../lib/Game"),
     support = path.join(__dirname, "support");
 
 before(function (done) {
-    fs.mkdir(support, function () {
-        done();
-    });
+    mkdirp(support, done);
 });
 
 describe("Game", function () {
@@ -22,7 +21,7 @@ describe("Game", function () {
     before(function (done) {
         var context = this;
 
-        fs.mkdir(dir, function (err) {
+        mkdirp(dir, function (err) {
             if (err) return done(err);
 
             fs.exists(jar, function (exists) {
@@ -38,7 +37,7 @@ describe("Game", function () {
     });
 
     after(function (done) {
-        wrench.rmdirRecursive(dir, done);
+        rimraf(dir, done);
     });
 
     describe(".constructor", function () {
