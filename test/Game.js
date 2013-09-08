@@ -145,6 +145,47 @@ describe("Game", function () {
         });
     });
 
+    describe("mc text stream", function () {
+        afterEach(function () {
+            game.removeAllListeners();
+        });
+
+        it("parses log events by line", function(done){
+            var count = 0;
+            function checkDone() {
+                count++;
+                if(count == 2) done();
+                if(count > 2) done('Too many calls');
+            };
+            game.on("left", checkDone);
+            game.on("joined", checkDone);
+            game.mcTxtStream.write("2013-09-04 20:33:12 [INFO] heneryville[/192.168.1.101:1158] logged in with entity id 33 at (559.5, 36.0, 85.5)\r\n" +
+                "2013-09-04 20:33:12 [INFO] heneryville joined the game\r\n" +
+                "2013-09-04 20:33:20 [INFO] heneryville lost connection: disconnect.quitting\r\n" +
+                "2013-09-04 20:33:20 [INFO] heneryville left the game\r\n"
+            );
+        });
+
+        it("parses mixed events by line", function(done){
+            var count = 0;
+            function checkDone() {
+                count++;
+                if(count == 6) done();
+                if(count > 6) done('Too many calls');
+            };
+            game.on("java", checkDone);
+            game.mcTxtStream.write("2013-09-07 18:32:55 [INFO] Saving playersi\r\n"
+            + "java.net.SocketException: Socket closed\r\n"
+            + "\tat java.net.PlainSocketImpl.socketAccept(Native Method)\r\n"
+            + "\tat java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:375)\r\n"
+            + "\tat java.net.ServerSocket.implAccept(ServerSocket.java:478)\r\n"
+            + "\tat java.net.ServerSocket.accept(ServerSocket.java:446)\r\n"
+            + "\tat ix.run(SourceFile:61)\r\n"
+            + "2013-09-07 18:32:55 [INFO] Closing listening thread);\r\n"
+            );
+        });
+    });
+
     describe("#start()", function () {
         this.timeout("15s");
 
