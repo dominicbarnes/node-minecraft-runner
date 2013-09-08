@@ -192,14 +192,17 @@ describe("Game", function () {
                 done();
             });
         });
+
+        it("should not fail when no callback is used", function (done) {
+            game.start();
+            game.once("started", done);
+        });
     });
 
     describe("#stop()", function () {
-        this.timeout("3s");
+        this.timeout("15s");
 
         beforeEach(function (done) {
-            this.timeout("10s");
-
             game.start(done);
         });
 
@@ -220,7 +223,6 @@ describe("Game", function () {
 
             game.stop(function (err) {
                 if (err) return done(err);
-
                 should.not.exist(game.process);
                 done();
             });
@@ -238,6 +240,11 @@ describe("Game", function () {
                 count.should.equal(2);
                 done();
             });
+        });
+
+        it("should not fail when no callback is used", function (done) {
+            game.stop();
+            game.once("stopped", done);
         });
     });
 
@@ -267,6 +274,11 @@ describe("Game", function () {
                 events.should.equal(5);
                 done();
             });
+        });
+
+        it("should not fail when no callback is used", function (done) {
+            game.restart();
+            game.once("started", done);
         });
     });
 

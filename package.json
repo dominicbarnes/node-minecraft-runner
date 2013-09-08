@@ -26,6 +26,7 @@
     "rimraf": "~2.2.2"
   },
   "dependencies": {
-    "lodash": "~1.0"
+    "lodash": "~1.0",
+    "nop": "0.0.0"
   }
 }
