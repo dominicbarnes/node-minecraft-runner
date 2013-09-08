@@ -1,6 +1,9 @@
 Version History
 ===============
 
+## 0.0.5 (September 8, 2013)
+ * Allowed the `callback` param for start/stop/restart to be excluded (21f6558ad578e71a72dc9225111656f6d44f8671)
+
 ## 0.0.4 (August 30, 2013)
  * Adding `CHANGES.md` (a0e79ebe0ded5ea4a4bba1b8b4e03af3b0a5fb64)
  * Replaced `wrench` with `rimraf` (556202d0bdb95420963658b87fc3f99484210f9c)
